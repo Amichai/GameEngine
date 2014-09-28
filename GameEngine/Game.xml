@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Game Title="testing" HasMultipleLevels="false">
+  <GameBoard Height="800" Origin="BottomLeft">
+    <VisibleArea Origin="BottomLeft" Position="0,0" Velocity="-100,0">
+        
+    </VisibleArea>
+  </GameBoard>
+  <GameElements>
+    <Element Origin="BottomLeft" Parent="Visible">
+      <State Position="0,0" Velocity="0,0">
+      </State>
+      <StaticImageAsset Path="C:\Users\amichai\Documents\MyProjects\runnerp2\assets\background1.jpg"></StaticImageAsset>
+      <Dimensions>
+        <Rectangle Width="*"></Rectangle>
+      </Dimensions>
+    </Element>
+  </GameElements>
+</Game>
