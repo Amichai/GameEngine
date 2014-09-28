@@ -14,17 +14,16 @@ namespace GameEngine {
 
         internal static Board Parse(XElement xElement) {
             Board toReturn = new Board();
-            if (xElement.Attribute("Width") != null) {
-                toReturn.Width = double.Parse(xElement.Attribute("Width").Value);
+            if (xElement.HasAttribute("Width")) {
+                toReturn.Width = xElement.AttributeDouble("Width");
             }
 
-            if (xElement.Attribute("Height") != null) {
-                toReturn.Height = double.Parse(xElement.Attribute("Height").Value);
+            if (xElement.HasAttribute("Height")) {
+                toReturn.Height = xElement.AttributeDouble("Height");
             }
 
-            if (xElement.Attribute("Origin") != null) {
-                toReturn.Origin = (CoordinateSystemOrigin)Enum.Parse(typeof(CoordinateSystemOrigin),
-                    xElement.Attribute("Origin").Value);
+            if (xElement.HasAttribute("Origin")) {
+                toReturn.Origin = xElement.AttributeEnum<CoordinateSystemOrigin>("Origin");
             }
 
             toReturn.VisibleArea = VisibleArea.Parse(xElement.Element("VisibleArea"));

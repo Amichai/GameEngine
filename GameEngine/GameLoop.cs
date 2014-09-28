@@ -16,11 +16,7 @@ namespace GameEngine {
             this.canvas = canvas;
             this.visibleAreaCanvas = visibleArea;
             Task.Factory.StartNew((Action)(() => {
-                try {
-                    this.loop();
-                } catch {
-
-                }
+                this.loop();    
             }), TaskCreationOptions.LongRunning);
         }
 
@@ -50,10 +46,6 @@ namespace GameEngine {
             }
         }
 
-        private void draw() {
-
-        }
-
         private DateTime? lastUpdate = null;
         private TimeSpan sinceLastUpdate {
             get {
@@ -71,17 +63,26 @@ namespace GameEngine {
         }
 
         private void update() {
-            var dt = now - lastUpdate;
             this.visibleArea.Update(sinceLastUpdate);
-            App.Current.Dispatcher.Invoke((Action)(() => {
+            App.Current.Dispatcher.BeginInvoke((Action)(() => {
                 Canvas.SetLeft(this.canvas, this.visibleArea.Position.X);
             }));
             foreach (var element in game.GameElements) {
+                var dt = now - lastUpdate;
                 if (!element.WasAddedToCanvas) {
-                    App.Current.Dispatcher.Invoke((Action)(() => {
+                    App.Current.Dispatcher.BeginInvoke((Action)(() => {
                         var r = element.Render();
                         element.SetVisualElement(r);
-                        this.canvas.Children.Add(r);
+                        if (r != null) {
+                            switch (element.ParentCoordinateSystem) {
+                                case CoordinateSystem.Board:
+                                    this.canvas.Children.Add(r);
+                                    break;
+                                case CoordinateSystem.Visible:
+                                    this.visibleAreaCanvas.Children.Add(r);
+                                    break;
+                            }
+                        }
                     }));
                     element.WasAddedToCanvas = true;
                 }
@@ -98,7 +99,7 @@ namespace GameEngine {
             while (true) {
                 if (running) {
                     this.update();
-                    this.draw();
+                    Thread.Sleep(2);
                 } else {
                     Thread.Sleep(50);
                 }

@@ -56,7 +56,7 @@
     <Compile Include="CollisionManager.cs" />
     <Compile Include="Elements\Assets\Asset.cs" />
     <Compile Include="Elements\Assets\SpriteSheet.cs" />
-    <Compile Include="Elements\Space\Dimensions.cs" />
+    <Compile Include="Elements\Space\Dimension.cs" />
     <Compile Include="Elements\GameElement.cs" />
     <Compile Include="Elements\Assets\StaticImageAsset.cs" />
     <Compile Include="Elements\Space\RectangleDimension.cs" />
@@ -64,6 +64,7 @@
     <Compile Include="Elements\VisualElement.cs" />
     <Compile Include="GameLoop.cs" />
     <Compile Include="PhysicsUtil.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="Vec2.cs" />
     <Compile Include="VisibleArea.cs" />
     <Compile Include="WindowSettings.cs" />
