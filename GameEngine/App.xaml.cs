@@ -1,4 +1,6 @@
-﻿using System;
+﻿using log4net;
+using log4net.Config;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -11,5 +13,12 @@ namespace GameEngine {
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application {
+        private static readonly ILog log = LogManager.GetLogger(typeof(App));
+
+        public App() {
+            XmlConfigurator.Configure();
+            log.InfoFormat("Application initialization");
+
+        }
     }
 }

@@ -16,9 +16,10 @@
     <Element Origin="BottomLeft" Parent="Visible" Name="character">
       <State Position="0,0" Velocity="0,0">
       </State>
-      <StaticImageAsset
-        Width="100"
-        Path="C:\Users\amichai\Documents\MyProjects\runnerp2\assets\sprites\running.png"></StaticImageAsset>  
+      <SpriteSheet
+        Width="100" FrameRate="30" TopLeft="0,0" 
+        ClipWidth="238.25" ClipHeight="222.5"
+        Path="C:\Users\amichai\Documents\MyProjects\runnerp2\assets\sprites\running.png"></SpriteSheet>  
     </Element>
   </GameElements>
 </Game>

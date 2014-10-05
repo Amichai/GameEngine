@@ -19,5 +19,9 @@ namespace GameEngine {
             return (T)Enum.Parse(typeof(T),
                     xml.Attribute(attribute).Value);
         }
+
+        public static int Round(this double val) {
+            return (int)Math.Round(val);
+        }
     }
 }

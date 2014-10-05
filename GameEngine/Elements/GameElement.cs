@@ -1,7 +1,9 @@
-﻿using GameEngine.Elements.Space;
+﻿using GameEngine.Elements.Assets;
+using GameEngine.Elements.Space;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,6 +17,7 @@ namespace GameEngine.Elements {
             this.Dimensions = new List<Dimension>();
             this.State = new State();
         }
+
         public Asset Asset { get; set; }
         public List<Dimension> Dimensions { get; set; }
         public State State { get; set; }
@@ -34,6 +37,9 @@ namespace GameEngine.Elements {
                 switch (element.Name.ToString()) {
                     case "StaticImageAsset":
                         toReturn.Asset = StaticImageAsset.Parse(element);
+                        break;
+                    case "SpriteSheet":
+                        toReturn.Asset = SpriteSheet.Parse(element);
                         break;
                     case "State":
                         toReturn.State = State.Parse(element);
@@ -63,12 +69,6 @@ namespace GameEngine.Elements {
                 return null;
             }
             var finalImage = this.Asset.GetImage();
-            if (this.Asset != null && this.Asset.Width.HasValue) {
-                finalImage.Width = this.Asset.Width.Value;
-            }
-            if (this.Asset != null && this.Asset.Height.HasValue) {
-                finalImage.Height = this.Asset.Height.Value;
-            }
             return finalImage;
         }
 
@@ -78,10 +78,20 @@ namespace GameEngine.Elements {
             this.visual = visual;
         }
 
+        public Subject<UIElement> VisualElementWillUpdate = new Subject<UIElement>();
+        public Subject<UIElement> VisualElementUpdated = new Subject<UIElement>();
+        
+
         internal void Update(TimeSpan dt) {
             this.State.Update(dt);
             if (this.visual == null) {
                 return;
+            }
+
+            if (this.Asset is SpriteSheet) {
+                this.VisualElementWillUpdate.OnNext(this.visual);
+                this.visual = this.Asset.GetImage();
+                this.VisualElementUpdated.OnNext(this.visual);
             }
             App.Current.Dispatcher.BeginInvoke((Action)(() => {
                 Canvas.SetLeft(this.visual, this.State.Position.X);

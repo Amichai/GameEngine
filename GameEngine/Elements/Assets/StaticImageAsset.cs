@@ -22,7 +22,6 @@ namespace GameEngine.Elements {
                 toReturn.Height = asset.AttributeDouble("Height");
             }
             return toReturn;
-
         }
 
         public override Image GetImage() {
@@ -32,6 +31,8 @@ namespace GameEngine.Elements {
             img.UriSource = new Uri(Path);
             img.EndInit();
             finalImage.Source = img;
+            setImageDimensions(finalImage);
+
             return finalImage;
         }
     }

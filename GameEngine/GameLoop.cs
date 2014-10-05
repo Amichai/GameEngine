@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -11,15 +12,19 @@ using System.Windows.Threading;
 
 namespace GameEngine {
     class GameLoop {
+        
         public GameLoop(Game game, Canvas canvas, Canvas visibleArea) {
             this.game = game;
             this.canvas = canvas;
             this.visibleAreaCanvas = visibleArea;
             Task.Factory.StartNew((Action)(() => {
-                this.loop();    
+                try {
+                    this.loop();
+                } catch (Exception ex){
+                    Debug.Print(ex.Message);
+                }
             }), TaskCreationOptions.LongRunning);
         }
-
 
         private Canvas canvas;
         private Canvas visibleAreaCanvas;
@@ -77,9 +82,25 @@ namespace GameEngine {
                             switch (element.ParentCoordinateSystem) {
                                 case CoordinateSystem.Board:
                                     this.canvas.Children.Add(r);
+                                    element.VisualElementWillUpdate.Subscribe(i => {
+                                        this.canvas.Children.Remove(i);
+                                    });
+                                    element.VisualElementUpdated.Subscribe(i => {
+                                        this.canvas.Children.Add(i);
+                                    });
                                     break;
                                 case CoordinateSystem.Visible:
                                     this.visibleAreaCanvas.Children.Add(r);
+                                    element.VisualElementWillUpdate.Subscribe(i => {
+                                        App.Current.Dispatcher.BeginInvoke((Action)(() => {
+                                            this.visibleAreaCanvas.Children.Remove(i);
+                                        }));
+                                    });
+                                    element.VisualElementUpdated.Subscribe(i => {
+                                        App.Current.Dispatcher.BeginInvoke((Action)(() => {
+                                            this.visibleAreaCanvas.Children.Add(i);
+                                        }));
+                                    });
                                     break;
                             }
                         }

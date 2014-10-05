@@ -12,5 +12,16 @@ namespace GameEngine.Elements {
         public double? Height { get; set; }
 
         public abstract Image GetImage();
+
+        protected void setImageDimensions(Image finalImage) {
+            App.Current.Dispatcher.BeginInvoke((Action)(() => {    
+                if (this.Width.HasValue) {
+                    finalImage.Width = this.Width.Value;
+                }
+                if (this.Height.HasValue) {
+                    finalImage.Height = this.Height.Value;
+                }
+            }));
+        }
     }
 }
